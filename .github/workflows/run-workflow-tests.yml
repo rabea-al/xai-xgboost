@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: "*"
+  workflow_dispatch:
 
 jobs:
   build-and-run:
@@ -37,16 +38,13 @@ jobs:
 
     - name: Clone Repository
       run: |
-        # as of 1.9, xai_xgboost still lives in the base xircuits installation
         rm -rf ${{ env.COMPONENT_LIBRARY_PATH }}
-        git clone -b ${{ env.BRANCH_NAME }} https://github.com/${{ github.repository }} ${{ env.COMPONENT_LIBRARY_PATH }}
-
-    - name: Setup XAI SKLearn Components
-      run: |
-        # as of 1.9, xai_sklearn still lives in the base xircuits installation
-        rm -rf xai_components/xai_sklearn
-        git clone https://github.com/XpressAI/xai-sklearn xai_components/xai_sklearn
-        pip install -r xai_components/xai_sklearn/requirements.txt
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          REPO_URL="${{ github.event.pull_request.head.repo.clone_url }}"
+        else
+          REPO_URL="https://github.com/${{ github.repository }}"
+        fi
+        git clone -b ${{ env.BRANCH_NAME }} $REPO_URL ${{ env.COMPONENT_LIBRARY_PATH }}
 
     - name: Install Component Library
       run: |
@@ -100,7 +98,7 @@ jobs:
 
     - name: Upload log file
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ env.LIBRARY_NAME }}-validation-workflow
         path: ${{ github.workspace }}/workflow_logs.txt
