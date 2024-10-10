@@ -34,7 +34,10 @@ jobs:
         fi
 
     - name: List Xircuits
-      run: xircuits list 
+      run: xircuits list
+
+    - name: Install Xircuits Library
+      run: xircuits install sklearn
 
     - name: Clone Repository
       run: |
