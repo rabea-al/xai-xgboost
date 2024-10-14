@@ -17,12 +17,21 @@ jobs:
     env:
       TEST_XIRCUITS: |
         examples/XGBoostClassifier.xircuits
-
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Install xircuits
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Create virtual environment
+      run: |
+        python -m venv venv
+        echo "${{ github.workspace }}/venv/bin" >> $GITHUB_PATH
+
+    - name: Install xircuits in virtual environment
       run: pip install xircuits
 
     - name: Set Environment Variables
@@ -61,7 +70,7 @@ jobs:
         else
           echo "requirements.txt not found."
         fi
-
+          
     - name: Test .xircuits Workflows
       run: |
         export PYTHONPATH="${GITHUB_WORKSPACE}:${PYTHONPATH}"
