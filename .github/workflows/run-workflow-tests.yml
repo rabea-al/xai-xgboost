@@ -116,5 +116,5 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.LIBRARY_NAME }}-validation-workflow
+        name: ${{ env.LIBRARY_NAME }}-validation-workflow-${{ matrix.python-version }}
         path: ${{ github.workspace }}/workflow_logs.txt
