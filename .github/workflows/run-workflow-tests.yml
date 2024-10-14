@@ -10,6 +10,10 @@ on:
 jobs:
   build-and-run:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
     env:
       TEST_XIRCUITS: |
         examples/XGBoostClassifier.xircuits
