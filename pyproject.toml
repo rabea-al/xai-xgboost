@@ -9,7 +9,8 @@ repository = "https://github.com/XpressAI/xai-xgboost"
 keywords = ["xircuits", "machine learning", "xgboost"]
 
 dependencies = [
-    "xgboost==2.1.1"
+    "xgboost==2.1.1",
+    "scikit-learn"
 ]
 
 # Xircuits-specific configurations
